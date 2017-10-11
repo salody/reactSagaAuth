@@ -1,9 +1,42 @@
-import { takeLatest } from 'redux-saga/effects';
-import { SIGNUP_REQUESTING } from "./constants";
+import { takeLatest, call, put } from 'redux-saga/effects';
+import {
+  SIGNUP_REQUESTING,
+  SIGNUP_SUCCESS,
+  SIGNUP_ERROR
+} from "./constants";
+
+// The url derived from our .env file
+const signupUrl = `${process.env.REACT_APP_API_URL}/api/Clients`
+
+function singupApi(email, password) {
+  return fetch(signupUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  })
+    .then(handleApiErrors)
+    .then(response => response.json())
+    .then(jsonData => jsonData)
+    .catch((error) => { throw error })
+
+}
 
 // This will be run when the SIGNUP_REQUESTING Action is found by watcher
 function* signupFlow (action) {
-
+  try {
+    const { email, password } = action;
+    // pulls "calls" to our signupApi with our email and password
+    // from our dispatched signup action, and will PAUSE
+    // here until the API async function, is complete!
+    const response = yield call(singupApi, email, password);
+    yield put({ type: SIGNUP_SUCCESS, response });
+  } catch (error) {
+    // if the api call fails, it will "put" the SIGNUP_ERROR
+    // into the dispatch along with the error.
+    yield put({ type: SIGNUP_ERROR, error });
+  }
 }
 
 // Watches for the SIGNUP_REQUESTING action type

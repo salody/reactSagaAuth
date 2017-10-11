@@ -8,9 +8,96 @@ docker-compose down
 
 docker-compose up -d
 
-### redux-saga
+## redux-saga
+
 * redux-saga 是一个用于管理 Redux 应用异步操作（Side Effects。译注：直译成 “副作用” 不太通顺，所以这里译为 “异步操作” 更好理解）的中间件（又称异步 action）。 redux-saga 通过创建 Sagas 将所有的异步操作逻辑收集在一个地方集中处理，可以用来代替 redux-thunk 中间件
 * 一些异步的action将被放入sagas中来处理。这将使得所有的action保持纯净。而不像thunk一样异步的东西也扔到action中
+
+### Effects
+
+Effect 是一个 javascript 对象，里面包含描述异步操作的信息，可以通过 yield 传达给 sagaMiddleware 执行
+
+在 redux-saga 世界里，所有的 Effect 都必须被 yield 才会执行，所以有人写了 [eslint-plugin-redux-saga**](http://link.zhihu.com/?target=https%3A//github.com/pke/eslint-plugin-redux-saga) 来检查是否每个 Effect 都被 yield。并且原则上来说，所有的 yield 后面也只能跟Effect，以保证代码的易测性。
+
+例如：
+
+```
+yield fetch(UrlMap.fetchData);
+
+```
+
+应该用 call Effect ：
+
+```
+yield call(fetch, UrlMap.fetchData)
+
+```
+
+从而可以使代码可测：
+
+```
+assert.deepEqual(iterator.next().value, call(fetch, UrlMap.fetchData))
+```
+
+关于各个 Effect 的具体介绍，文档已经写得很详细了，这里只做简要介绍。
+
+#### put
+
+作用和 redux 中的 dispatch 相同。
+
+```
+yield put({ type: 'CLICK_BTN' });
+
+```
+
+#### select
+
+作用和 redux thunk 中的 getState 相同。
+
+```
+const id = yield select(state => state.id);
+
+```
+
+#### take
+
+等待 redux dispatch 匹配某个 pattern 的 action 。
+
+在这个例子中，先等待一个按钮点击的 action ，然后执行按钮点击的 saga：
+
+```
+while (true) {
+  yield take('CLICK_BUTTON');
+  yield fork(clickButtonSaga);
+}
+
+```
+
+再举一个利用 take 实现 logMiddleware 的例子：
+
+```
+while (true) {
+  const action = yield take('*');
+  const newState = yield select();
+  
+  console.log('received action:', action);
+  console.log('state become:', newState);
+}
+
+```
+
+这种监听一个 action ，然后执行相应任务的方式，在 redux-saga 中非常常用，因此 redux-saga 提供了一个辅助 Effect —— takeEvery ，让 watch/worker 的代码更加清晰。
+
+```
+yield takeEvery('*', function* logger(action) {
+  const newState = yield select();
+
+  console.log('received action:', action);
+  console.log('state become:', newState);
+});
+```
+
+
 
 #### 流程
 
@@ -127,3 +214,11 @@ MyComponent.propTypes = {
   true && !!0   // false
 ```
 &&操作可以应用于任何类型的操作数，而不仅仅是布尔值。在有一个操作数不是布尔值的情况下，就不一定返回布尔值
+
+### Fetch
+
+Note that the `fetch `specification differs from `jQuery.ajax() `in mainly two ways that bear keeping in mind:
+
+- The Promise returned from `fetch()` **won’t reject on HTTP error status** even if the response is an HTTP 404 or 500. Instead, it will resolve normally (with `ok` status set to false), and it will only reject on network failure or if anything prevented the request from completing.
+- By default, `fetch` **won't send or receive any cookies** from the server, resulting in unauthenticated requests if the site relies on maintaining a user session (to send cookies, the *credentials* [init option](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) must be set).
+
