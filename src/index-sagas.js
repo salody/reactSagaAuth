@@ -4,3 +4,6 @@
  * 2017/10/10
  */
 
+export default function* IndexSaga () {
+  yield []
+}
