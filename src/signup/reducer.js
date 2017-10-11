@@ -1,4 +1,8 @@
-import { SIGNUP_REQUESTING } from "./constants";
+import {
+  SIGNUP_REQUESTING,
+  SIGNUP_SUCCESS,
+  SIGNUP_ERROR
+} from "./constants";
 
 const initialState = {
   requesting: false,   // 发起一个注册请求
@@ -11,13 +15,44 @@ const signupReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGNUP_REQUESTING:
       return {
-        ...state,
         requesting: true,
-        messages: [{
-          body: 'Signing up...',
-          time: new Date()
-        }]
+        successful: false,
+        messages: [{ body: 'Signing up...', time: new Date() }],
+        errors: []
       };
+
+    // reset the state and add a body message of success
+    // successfully returned payload will be:
+    // {"email": "of the new user", "id": "of the new user"}
+    case  SIGNUP_SUCCESS:
+      return {
+        requesting: false,
+        successful: true,
+        messages: [{
+          body: `Successfully created account for ${action.response.email}`,
+          time: new Date()
+        }],
+        errors: []
+      };
+
+    // reset the state but with errors!
+    // the error payload returned is actually far
+    // more detailed, but we'll just stick with
+    // the base message for now
+    case SIGNUP_ERROR:
+      return {
+        requesting: false,
+        successful: false,
+        messages: [],
+        errors: [
+          ...state.errors,
+          {
+            body: action.error.toString(),
+            time: new Date()
+          }
+        ]
+      };
+
     default:
       return state;
   }
