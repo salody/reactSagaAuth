@@ -42,9 +42,8 @@ input[type="number"] {
   width: 100%;
   font-family: sans-serif;
   font-size: 16px;
-  appearance: none;
+  outline: none;
   box-shadow: none;
-  border-radius: none;
 }
 input[type="text"]:focus,
 input[type="email"]:focus,
@@ -64,9 +63,7 @@ button {
   text-decoration: none;
   text-shadow: 0 1px 3px rgba(0,0,0,0.3);
   box-shadow: 0 1px 1px rgba(0,0,0,0.2);
-  text-decoration: none;
   background: #cc7a6f;
-  color: #fafafa;
   margin-top: 1rem;
 }
 
@@ -81,7 +78,7 @@ label {
 
 ul {
   padding-left: 20px;
-  list-style-type: 0;
+  list-style-type: none
 }
 
 ul li {
@@ -118,6 +115,7 @@ hr {
   border: solid 1px #dcdcdc;
   transition: box-shadow 0.3s, border 0.3s;
   margin-bottom: 1rem;
+
 }
 
 .widget-form input[type="text"]:focus,
@@ -164,4 +162,13 @@ table td {
 
 table tr:hover td {
   background: #f2f2f2;
+}
+
+.auth_messages {
+  margin-top: 1rem;
+}
+
+.auth_messages a {
+  text-decoration: none;
+
 }
