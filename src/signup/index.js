@@ -43,7 +43,7 @@ class Signup extends Component {
 
     return (
       <div className="signup">
-        <form className="widegt-form" onSubmit={handleSubmit(this.submit)}>
+        <form className="widget-form" onSubmit={handleSubmit(this.submit)}>
           <h1>Signup</h1>
           <label htmlFor="email">Email</label>
           <Field
