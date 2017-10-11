@@ -116,7 +116,7 @@ then
 
   If a function is passed, it will be given dispatch as the first parameter. It’s up to you to return an object that somehow uses dispatch to bind action creators in your own way. (Tip: you may use the bindActionCreators() helper from Redux.)
 
-### PropTypes
+## PropTypes
 
 下面是使用不同验证器的例子：
 
@@ -202,12 +202,14 @@ MyComponent.propTypes = {
 };
 ```
 
-### 单元测试
+## 单元测试
+
 如果需要对组件做单元测试，将源组件export出去，而connected的组件作为default来export。
 
 因为你不需要关系redux wrapper是否工作正常（你不需要测试redux）。你只需要保证自己的组件正常就行
 
-### !!强制转换成bool类型
+## !!强制转换成bool类型
+
 **遇到数字和&&一定要注意**
 ```
   true && 0     // 0
@@ -215,7 +217,7 @@ MyComponent.propTypes = {
 ```
 &&操作可以应用于任何类型的操作数，而不仅仅是布尔值。在有一个操作数不是布尔值的情况下，就不一定返回布尔值
 
-### Fetch
+## Fetch
 
 Note that the `fetch `specification differs from `jQuery.ajax() `in mainly two ways that bear keeping in mind:
 
