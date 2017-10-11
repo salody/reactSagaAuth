@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {reduxForm, Field} from 'redux-form';
 import {connect} from 'react-redux';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import PropTypes from 'prop-types';
 
 // Import the helpers...
@@ -81,12 +81,12 @@ class Signup extends Component {
           )}
           {!requesting && successful && (
             <div>
-              Signup Successful! <Link to="/login">Click here to Login »</Link>
+              Signup Successful! <p onClick={() => browserHistory.push('/login')}>Click here to Login »</p>
             </div>
           )}
           {/* Redux Router's <Link> component for quick navigation of routes */}
           {!requesting && !successful && (
-            <Link to="/login">Already a Widgeter? Login Here »</Link>
+            <p onClick={() => browserHistory.push('/login')}>Already a Widgeter? Login Here »</p>
           )}
         </div>
       </div>
