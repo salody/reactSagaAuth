@@ -63,7 +63,7 @@ class Signup extends Component {
             label="Password"
             component="input"
           />
-          <button action="submit">SIGNUP</button>
+          <button className="signup-submit" action="submit">SIGNUP</button>
         </form>
         <div className="auth_messages">
           {
