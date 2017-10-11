@@ -4,9 +4,10 @@ import {
   SIGNUP_SUCCESS,
   SIGNUP_ERROR
 } from "./constants";
-import { handleApiErrors } from '../lib/api-error'
+import { handleApiErrors } from '../lib/api-error';
+
 // The url derived from our .env file
-const signupUrl = `${process.env.REACT_APP_API_URL}/api/Clients`
+const signupUrl = `${process.env.REACT_APP_API_URL}/api/Clients`;
 
 function singupApi(email, password) {
   return fetch(signupUrl, {

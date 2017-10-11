@@ -223,4 +223,13 @@ Note that the `fetch `specification differs from `jQuery.ajax() `in mainly two w
 
 - The Promise returned from `fetch()` **won’t reject on HTTP error status** even if the response is an HTTP 404 or 500. Instead, it will resolve normally (with `ok` status set to false), and it will only reject on network failure or if anything prevented the request from completing.
 - By default, `fetch` **won't send or receive any cookies** from the server, resulting in unauthenticated requests if the site relies on maintaining a user session (to send cookies, the *credentials* [init option](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters) must be set).
+## create-react-app环境变量的使用
+在根目录创建.env文件。添加如下的配置。
+
+REACT_APP_API_URL=http://localhost:3002
+
+所有的配置必须以REACT_APP_开头。形如REACT_APP_*
+
+
+
 
