@@ -23,6 +23,12 @@ class Signup extends Component {
     })
   };
 
+  componentDidMount() {
+    console.group('Signup的props');
+    console.log(this.props);
+    console.groupEnd();
+  }
+
   // Redux Form will call this function with the values of our
   // Form fields "email" and "password" when the form is submitted
   // this will in turn call the action
