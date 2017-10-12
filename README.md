@@ -116,6 +116,24 @@ then
 
   If a function is passed, it will be given dispatch as the first parameter. It’s up to you to return an object that somehow uses dispatch to bind action creators in your own way. (Tip: you may use the bindActionCreators() helper from Redux.)
 
+## react-router
+
+* onEnter
+
+```
+const requireAuth = (nextState, replace) => {
+    if (!auth.isAdmin()) {
+        // Redirect to Home page if not an Admin
+        replace({ pathname: '/' })
+    }
+}
+export const AdminRoutes = () => {
+  return (
+     <Route path="/admin" component={Admin} onEnter={requireAuth} />
+  )
+}
+```
+
 ## PropTypes
 
 下面是使用不同验证器的例子：
