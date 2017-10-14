@@ -11,8 +11,8 @@ import {
 
 // So that we can modify our Client piece of state
 import {
-  setClinet,
-  unsetClinet
+  setClient,
+  unsetClient
 } from "../client/actions";
 
 import {
@@ -36,7 +36,7 @@ function loginApi(email, password) {
 }
 
 function* logout() {
-  yield put(unsetClinet());
+  yield put(unsetClient());
   localStorage.removeItem('token');
   browserHistory.push('/login');
 }
@@ -45,7 +45,7 @@ function* loginFlow (email, password) {
   let token;
   try {
     token = yield loginApi(email, password);
-    yield put(setClinet(token));
+    yield put(setClient(token));
     yield put({type: LOGIN_SUCCESS});
     localStorage.setItem('token', JSON.stringify(token));
     browserHistory.push('/widgets');

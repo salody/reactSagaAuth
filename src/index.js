@@ -1,14 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyMiddleware, createStore, compose } from 'redux';
-import { Provider } from 'react-redux';
+import {applyMiddleware, createStore, compose} from 'redux';
+import {Provider} from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import {Router, Route, browserHistory, IndexRoute} from 'react-router';
+
+import {
+  checkIndexAuthorization,
+  checkWidgetAuthorization,
+} from './lib/check-auth'
 
 // Import all of our components
 import App from './App';
 import Login from './login';
-import Signup  from './signup';
+import Signup from './signup';
 import Widgets from './widgets';
 import './index.css';
 
@@ -39,9 +44,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/widgets" component={Widgets} />
+        <IndexRoute onEnter={checkIndexAuthorization(store)}/>
+        <Route path="/login" component={Login}/>
+        <Route path="/signup" component={Signup}/>
+        <Route onEnter={checkWidgetAuthorization(store)} path="/widgets" component={Widgets}/>
       </Route>
     </Router>
   </Provider>,

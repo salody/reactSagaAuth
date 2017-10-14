@@ -1,13 +1,13 @@
 import { CLIENT_SET, CLIENT_UNSET} from './constants';
 
-export function setClinet(token) {
+export function setClient(token) {
   return {
     type: CLIENT_SET,
     token
   }
 }
 
-export function unsetClinet(token) {
+export function unsetClient(token) {
   return {
     type: CLIENT_UNSET,
     token
