@@ -16,20 +16,49 @@ import {
 } from "../client/actions";
 
 import {
-  CLIENT_SET,
   CLIENT_UNSET
 } from "../client/constants";
 
-function loginApi() {
+const loginUrl = `${process.env.REACT_APP_API_URL}/api/Clients/login`;
 
+function loginApi(email, password) {
+  fetch(loginUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  })
+    .then(handleApiErrors)
+    .then(response => response.json())
+    .then(jsonData => jsonData)
+    .catch((error) => { throw error })
 }
 
 function* logout() {
-
+  yield put(unsetClinet());
+  localStorage.removeItem('token');
+  browserHistory.push('/login');
 }
 
 function* loginFlow (email, password) {
-
+  let token;
+  try {
+    token = yield loginApi(email, password);
+    yield put(setClinet(token));
+    yield put({type: LOGIN_SUCCESS});
+    localStorage.setItem('token', JSON.stringify(token));
+    browserHistory.push('/widgets');
+  } catch(error) {
+    yield put({ type: LOGIN_ERROR, error });
+  } finally {
+    // No matter what, if our `forked` `task` was cancelled
+    // we will then just redirect them to login
+    if (yield cancelled()) {
+      browserHistory.push('/login');
+    }
+  }
+  return token;
 }
 
 function* loginWatch () {
