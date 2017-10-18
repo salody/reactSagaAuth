@@ -1,6 +1,6 @@
-import { take, fork, cancel, call, put, cancelled } from 'redux-saga/effects';
-import { browserHistory } from 'react-router'
-import { handleApiErrors } from '../lib/api-error';
+import {take, fork, cancel, call, put, cancelled} from 'redux-saga/effects';
+import {browserHistory} from 'react-router'
+import {handleApiErrors} from '../lib/api-error';
 
 // login constants
 import {
@@ -22,17 +22,24 @@ import {
 const loginUrl = `${process.env.REACT_APP_API_URL}/api/Clients/login`;
 
 function loginApi(email, password) {
-  fetch(loginUrl, {
+  return fetch(loginUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({email, password})
   })
     .then(handleApiErrors)
-    .then(response => response.json())
+    .then(response => {
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
+      return response.json();
+    })
     .then(jsonData => jsonData)
-    .catch((error) => { throw error })
+    .catch((error) => {
+      throw error
+    })
 }
 
 function* logout() {
@@ -41,7 +48,7 @@ function* logout() {
   browserHistory.push('/login');
 }
 
-function* loginFlow (email, password) {
+function* loginFlow(email, password) {
   let token;
   try {
     token = yield loginApi(email, password);
@@ -49,8 +56,8 @@ function* loginFlow (email, password) {
     yield put({type: LOGIN_SUCCESS});
     localStorage.setItem('token', JSON.stringify(token));
     browserHistory.push('/widgets');
-  } catch(error) {
-    yield put({ type: LOGIN_ERROR, error });
+  } catch (error) {
+    yield put({type: LOGIN_ERROR, error});
   } finally {
     // No matter what, if our `forked` `task` was cancelled
     // we will then just redirect them to login
@@ -61,11 +68,11 @@ function* loginFlow (email, password) {
   return token;
 }
 
-function* loginWatch () {
+function* loginWatch() {
   // Starting a loop.
   while (true) {
     // watching for the LOGIN_REQUESTING action
-    const { email, password } = yield take(LOGIN_REQUESTING);
+    const {email, password} = yield take(LOGIN_REQUESTING);
 
     // Fork a background task that will run loginFlow()。
     // 这个是异步的 不会阻止下面代码的进行。

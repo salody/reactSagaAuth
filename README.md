@@ -220,6 +220,14 @@ MyComponent.propTypes = {
 };
 ```
 
+## redux_form
+
+* Form validation:
+
+  If a value is passing/valid, Redux Form requires that we return `undefined`.
+
+
+
 ## 单元测试
 
 如果需要对组件做单元测试，将源组件export出去，而connected的组件作为default来export。

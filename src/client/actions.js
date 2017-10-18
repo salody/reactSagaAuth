@@ -7,9 +7,8 @@ export function setClient(token) {
   }
 }
 
-export function unsetClient(token) {
+export function unsetClient() {
   return {
     type: CLIENT_UNSET,
-    token
   }
 }

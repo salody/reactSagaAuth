@@ -21,7 +21,7 @@ function* updateToken() {
 
 function checkAuthorization(dispatch) {
   const storedToken = localStorage.getItem('token');
-
+  
   if (storedToken) {
     const token = JSON.parse(storedToken);
     const createdDate = new Date(token.created);
